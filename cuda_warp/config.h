@@ -1,0 +1,6 @@
+#ifndef CUDA_WARP_CONFIG_H_INCLUDED
+#define CUDA_WARP_CONFIG_H_INCLUDED
+
+#define BLOCK_SIZE 1024
+
+#endif
