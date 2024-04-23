@@ -19,16 +19,17 @@ if __name__ == "__main__":
     # print(flow.shape, im0.shape)
 
     im0_warp = forward_warp(im0, flow)
-    mask = torch.ones_like(im0)
-    mask_warp = forward_warp(mask, flow)
-    im0_warp = im0_warp / mask_warp
-    # print(im0_warp.shape)
     cv2.imwrite("im0_warp.png", im0_warp[0].permute(1, 2, 0).detach().cpu().numpy().astype(np.uint8))
     im1_warp = backward_warp(im1, flow)
     cv2.imwrite("im1_warp.png", im1_warp[0].permute(1, 2, 0).detach().cpu().numpy().astype(np.uint8))
 
-    loss = F.mse_loss(im0_warp, im1)
+    loss = im0_warp.sum()
     loss.backward()
+    grad_im0 = im0.grad
+    cv2.imwrite("grad_im0.png", grad_im0[0].permute(1, 2, 0).detach().cpu().numpy().astype(np.uint8))
+    
+    # loss = F.mse_loss(im0_warp, im1)
+    # loss.backward()
 
     # loss = F.mse_loss(im1_warp, im0)
     # loss.backward()
