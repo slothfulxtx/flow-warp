@@ -1,4 +1,3 @@
-#include "warp.h"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -7,14 +6,13 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <cub/cub.cuh>
-#include <cub/device/device_radix_sort.cuh>
 
 #include <cooperative_groups.h>
 #include <cooperative_groups/reduce.h>
 namespace cg = cooperative_groups;
 
 #include "config.h"
-
+#include "warp.h"
 
 __forceinline__ __device__ int get_index(
   const int b,
@@ -112,8 +110,8 @@ __global__ void backward_kernel(
       const float se_k = (x - x_f) * (y - y_f);
       float dL_dflow_x = 0;
       float dL_dflow_y = 0;
-      const float* dL_dwf = dL_dwfeat + get_index(b, 0, h, w, C, H, W);
-      float* dL_df = dL_dfeat + get_index(b, 0, y_f, x_f, C, H, W);
+      const float* dL_dwf = dL_dwfeat + get_index(b, 0, y_f, x_f, C, H, W);
+      float* dL_df = dL_dfeat + get_index(b, 0, h, w, C, H, W);
       for (int c = 0; c < C; ++c, dL_df+=H*W, dL_dwf+=H*W){
         const float nw_grad = (*dL_dwf);
         const float ne_grad = (*dL_dwf+1);

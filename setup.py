@@ -6,7 +6,7 @@ os.path.dirname(os.path.abspath(__file__))
 setup(
     name="flow_warp",
     packages=['flow_warp'],
-    version="0.1.1",
+    version="0.1.5",
     ext_modules=[
         CUDAExtension(
             name="flow_warp._C",

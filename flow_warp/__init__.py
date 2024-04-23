@@ -25,8 +25,7 @@ def forward_warp(x:torch.Tensor, flow: torch.Tensor, mode: str='bilinear'):
     """
         x: feature map with shape [B, C, H, W]
         flow: optical flow with shape [B, H, W, 2], range from [-W, -H] to [W, H]
-        mode: Bilinear or Nearest
-    
+        mode: bilinear or nearest
     """
 
     assert x.ndim == 4 and flow.ndim == 4
@@ -38,8 +37,7 @@ def forward_warp(x:torch.Tensor, flow: torch.Tensor, mode: str='bilinear'):
 
     x = x.contiguous()
     flow = flow.contiguous()
-    mode_num = 0 if mode == 'Bilinear' else 1
-
+    mode_num = 0 if mode == 'bilinear' else 1
     return _ForwardWarp.apply(x, flow, mode_num)
         
 def backward_warp(x:torch.Tensor, flow: torch.Tensor, mode: str='bilinear'):
